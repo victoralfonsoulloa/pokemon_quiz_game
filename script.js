@@ -1,6 +1,6 @@
 // Get DOM elements 
 const resultElement = document.getElementById("result");
-const pokemonImage = document.getElementById("pokemonImage");
+const pokemonImageElement = document.getElementById("pokemonImage");
 const optionsContainer = document.getElementById("options");
 const pointsElement = document.getElementById("pointsValue");
 const totalCount = document.getElementById("totalCount");
@@ -38,7 +38,7 @@ async function loadQuestionWithOptions() {
 
     //If pokemon has not been displayed yet, it is added to usedPokemonIds. And it is set as new const Pokemon.
     usedPokemonIds.push(pokemonId);
-    const pokemon = await fetchPokemonById(PokemonId);
+    const pokemon = await fetchPokemonById(pokemonId);
 
     //Create options array
     const options = [pokemon.name];
@@ -51,13 +51,38 @@ async function loadQuestionWithOptions() {
         while (optionsIds.includes(randomPokemonId)) {
             randomPokemonId = getRamdonPokemonId();
         }
+        optionsIds.push(randomPokemonId);
+
+        // Fetching random Pokemon with the newly made ID, and adding it to the options array.
+        const randomPokemon = await fetchPokemonById(randomPokemonId);
+        const randomOption = randomPokemon.name;
+        options.push(randomOption);
+
+        // Test
+
+        console.log(options);
+        console.log(optionsIds)
     }
 
+    shuffleArray(options);
+
+    // Clear any previous result and update Pokemon image to fetched image URL from the sprites.
+    resultElement.textContent = "Who's that Pokemon";
+    pokemonImageElement.src = pokemon.sprites.other.dream_world.front_default;
 }
+
+// Initial Load
+
+loadQuestionWithOptions();
 
 // --- Utility Functions ---
 // Function to randomize the Pokemon ID
 function getRamdonPokemonId() {
     return Math.floor(Math.random() * 151) + 1;
+}
+
+// Shuffle the array we send it 
+function shuffleArray (array) {
+    return array.sort(() => Math.random() - 0.5)
 }
 

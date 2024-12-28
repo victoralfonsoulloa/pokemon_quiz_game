@@ -9,6 +9,8 @@ const loadingContainer = document.getElementById("loadingContainer");
 
 // Initialize variables 
 let usedPokemonIds = [];
+let count = 0;
+let points = 0;
 
 // Create function to fetch one Pokemon with an ID
 async function fetchPokemonById(id) {
@@ -75,9 +77,38 @@ async function loadQuestionWithOptions() {
     options.forEach((option) => {
         const button = document.createElement("button");
         button.textContent = option;
-        button.onclick = (event) => checkAnswer();
+        button.onclick = (event) => checkAnswer(option === pokemon.name, event);
         optionsContainer.appendChild(button);
     })
+}
+
+// Create checkAnswer function 
+function checkAnswer(isCorrect, event) {
+    // Checks if any button is already selected, if falsy => no element => null.
+    const selectedButton = document.querySelector(".selected");
+
+    // If already a button is selected, do nothing, exit function.
+    if (selectedButton) {
+        return;
+    }
+    
+    // Else mark the clicked button as selected and increase the count by 1.
+    event.target.classList.add("selected");
+    count++;
+    totalCount.textContent = count;
+
+    if (isCorrect) {
+        displayResult("Correct Answer!");
+        // If correct, increase the points by 1.
+        points++;
+        pointsElement.textContent = points;
+        event.target.classList.add("correct");
+    } else {
+        displayResult("Wrong Answer...");
+        event.target.classList.add("wrong");
+    }
+
+    
 }
 
 // Initial Load
@@ -93,5 +124,10 @@ function getRamdonPokemonId() {
 // Shuffle the array we send it 
 function shuffleArray (array) {
     return array.sort(() => Math.random() - 0.5)
+}
+
+// Function to update result text and class name.
+function displayResult(result) {
+    resultElement.textContent = result;
 }
 

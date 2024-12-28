@@ -64,12 +64,12 @@ button:hover {
     color: var(--white-color);
 }
 
-.button.correct {
+button.correct {
     background-color: var(--button-correct);
     color: var(--white-color);
 }
 
-.button.wrong {
+button.wrong {
     background-color: var(--button-wrong);
     color: var(--white-color);
 }

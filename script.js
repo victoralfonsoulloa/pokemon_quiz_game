@@ -7,7 +7,7 @@ const totalCount = document.getElementById("totalCount");
 const mainContainer = document.getElementById("container");
 const loadingContainer = document.getElementById("loadingContainer");
 
-//Initialize variables 
+// Initialize variables 
 let usedPokemonIds = [];
 
 // Create function to fetch one Pokemon with an ID
@@ -26,25 +26,25 @@ async function fetchPokemonById(id) {
 // // Call test function
 // testFetch();
 
-//Function to load question with options
+// Function to load question with options
 async function loadQuestionWithOptions() {
-    //Fetch correct answer first
+    // Fetch correct answer first
     let pokemonId = getRamdonPokemonId();
 
-    //Check if current question has already been used
+    // Check if current question has already been used
     while (usedPokemonIds.includes(pokemonId)) {
         pokemonId = getRamdonPokemonId();
     }
 
-    //If pokemon has not been displayed yet, it is added to usedPokemonIds. And it is set as new const Pokemon.
+    // If pokemon has not been displayed yet, it is added to usedPokemonIds. And it is set as new const Pokemon.
     usedPokemonIds.push(pokemonId);
     const pokemon = await fetchPokemonById(pokemonId);
 
-    //Create options array
+    // Create options array
     const options = [pokemon.name];
     const optionsIds = [pokemon.id];
 
-    //Fetch additional random pokemon names to use as options
+    // Fetch additional random pokemon names to use as options
     while (options.length < 4) {
         let randomPokemonId = getRamdonPokemonId();
         // Ensure fetch option does not exist in the options list. Creates a new random id until it doesn't exist. 
@@ -69,6 +69,15 @@ async function loadQuestionWithOptions() {
     // Clear any previous result and update Pokemon image to fetched image URL from the sprites.
     resultElement.textContent = "Who's that Pokemon";
     pokemonImageElement.src = pokemon.sprites.other.dream_world.front_default;
+
+    // Create options HTML elements from options array in the DOM
+    optionsContainer.innerHTML = "";
+    options.forEach((option) => {
+        const button = document.createElement("button");
+        button.textContent = option;
+        button.onclick = (event) => checkAnswer();
+        optionsContainer.appendChild(button);
+    })
 }
 
 // Initial Load
